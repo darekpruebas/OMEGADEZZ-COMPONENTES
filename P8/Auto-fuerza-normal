@@ -8,8 +8,8 @@ local ROCK_NAME = "Rock5M"
 local PROTEIN_EGG_NAME = "ProteinEgg"
 local PROTEIN_EGG_INTERVAL = 30 * 60 -- 30 minutos
 local REPS_PER_CYCLE = 20 -- Aumentado para más repeticiones por ciclo
-local REP_DELAY = 0.0005 -- Más rápido, pero aún seguro
-local ROCK_INTERVAL = 3 -- Menor intervalo para pegar más seguido
+local REP_DELAY = 0.0001 -- Más rápido, pero aún seguro
+local ROCK_INTERVAL = 2 -- Menor intervalo para pegar más seguido
 
 getgenv()._AutoRepFarmEnabled = not getgenv()._AutoRepFarmEnabled
 if not getgenv()._AutoRepFarmEnabled then
