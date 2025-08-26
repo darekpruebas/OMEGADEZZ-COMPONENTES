@@ -1,0 +1,78 @@
+loadstring([[
+local p = game.Players.LocalPlayer
+local f = {
+    "ParticleEmitter", "Trail", "Beam", "Fire", "Smoke", "Sparkles", "SurfaceLight", "SpotLight", "Explosion", "Highlight"
+}
+local n = {
+    "Agility", "Effect", "Aura", "FX",
+    "Energy", "Glow", "Shine", "Flash", "Spark", "Smoke", "Trail", "Light", "Fire"
+}
+
+-- Definir partÃ­culas que no deben ser eliminadas (relacionadas con las mascotas)
+local petEffects = {
+    "PetStat", "PetAura", "PetGlow"  -- Puedes agregar mÃ¡s nombres relacionados con las mascotas
+}
+-- FunciÃ³n de limpieza global
+local function clean(target)
+    for _, v in pairs((target or game):GetDescendants()) do
+        -- No eliminar efectos relacionados con las mascotas
+        local shouldDelete = true
+        for _, petEffect in ipairs(petEffects) do
+            if v.Name:lower():find(petEffect:lower()) then
+                shouldDelete = false  -- No eliminar si es un efecto de mascota
+                break
+            end
+        end
+        
+        -- Si no es un efecto de mascota, eliminarlo
+        if shouldDelete then
+            for _, class in ipairs(f) do
+                if v:IsA(class) then
+                    pcall(function() v:Destroy() end)
+                end
+            end
+            for _, key in ipairs(n) do
+                if v.Name:lower():find(key:lower()) then
+                    pcall(function() v:Destroy() end)
+                end
+            end
+        end
+    end
+end
+
+-- Ejecutar limpieza inicial
+clean()
+
+-- Limpiar al reaparecer personaje
+p.CharacterAdded:Connect(function(c)
+    c:WaitForChild("HumanoidRootPart", 5)
+    wait(1)
+    clean()
+end)
+
+-- Limpiar cualquier cosa nueva en todo el juego
+game.DescendantAdded:Connect(function(o)
+    -- No eliminar efectos relacionados con las mascotas
+    local shouldDelete = true
+    for _, petEffect in ipairs(petEffects) do
+        if o.Name:lower():find(petEffect:lower()) then
+            shouldDelete = false
+            break
+        end
+    end
+    
+    -- Eliminar si no es un efecto de mascota
+    if shouldDelete then
+        for _, class in ipairs(f) do
+            if o:IsA(class) then
+                pcall(function() o:Destroy() end)
+            end
+        end
+        for _, key in ipairs(n) do
+            if o.Name:lower():find(key:lower()) then
+                pcall(function() o:Destroy() end)
+            end
+        end
+    end
+end)
+]])()
